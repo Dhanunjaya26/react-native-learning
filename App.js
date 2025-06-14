@@ -12,12 +12,12 @@ import {
 
 const GOALS_LIST = [
   {
-    key: 0,
+    id: 0,
     title: "Master react native",
     isComplete: false,
   },
   {
-    key: 1,
+    id: 1,
     title: "Master DSA",
     isComplete: false,
   },
@@ -32,7 +32,7 @@ export default function App() {
       console.log("goal added to the list", inputValue);
       setGoals([
         ...goals,
-        { key: goals.length, title: inputValue, isComplete: false },
+        { id: goals.length, title: inputValue, isComplete: false },
       ]);
       setInputValue("");
     }
@@ -60,6 +60,9 @@ export default function App() {
                 <Text style={styles.goalText}>{itemData.item.title}</Text>
               </View>
             );
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
           }}
         />
       </View>
