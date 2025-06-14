@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
   Button,
+  FlatList,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,16 +11,16 @@ import {
 } from "react-native";
 
 const GOALS_LIST = [
-  // {
-  //   id: 0,
-  //   title: "Master react native",
-  //   isComplete: false,
-  // },
-  // {
-  //   id: 1,
-  //   title: "Master DSA",
-  //   isComplete: false,
-  // },
+  {
+    key: 0,
+    title: "Master react native",
+    isComplete: false,
+  },
+  {
+    key: 1,
+    title: "Master DSA",
+    isComplete: false,
+  },
 ];
 
 export default function App() {
@@ -31,7 +32,7 @@ export default function App() {
       console.log("goal added to the list", inputValue);
       setGoals([
         ...goals,
-        { id: goals.length, title: inputValue, isComplete: false },
+        { key: goals.length, title: inputValue, isComplete: false },
       ]);
       setInputValue("");
     }
@@ -47,21 +48,20 @@ export default function App() {
         />
         <Button title="Add Goal" onPress={addGoalHandler} />
       </View>
-      {/* we have to add scroll view to make content scrollable and wrap scrollView inside a view, only then the goals container will ocuppy the intended space. if you don't do it and add goalsContainer styles directly on ScrollView, the space that it occupies won't be correct. Basically outer view controls how much screen the content should take up and ScrollView makes the content scrollable */}
       <View style={styles.goalsContainer}>
-        <ScrollView alwaysBounceVertical={false}>
-          {goals &&
-            goals.map((goal) => {
-              {
-                /* wrapping text inside view here as ios native element which will be transpiled to from Text, won't support borderRadius.(It seems to support now - latest) */
-              }
-              return (
-                <View key={goal.id} style={styles.goalItem}>
-                  <Text style={styles.goalText}>{goal.title}</Text>
-                </View>
-              );
-            })}
-        </ScrollView>
+        <FlatList
+          alwaysBounceVertical={false}
+          data={goals}
+          renderItem={(itemData) => {
+            // you don't have to give key prop to the elements in the list. FlatList takes care of it if you provide key property in each object of goals array.
+            // FlatList calls renderItem({ item, index, separators }). So, the argument in callback function assigned to renderItem(itemData) is actually an object. So, inorder to extract title from the goal, you have to do itemData.item.title
+            return (
+              <View style={styles.goalItem}>
+                <Text style={styles.goalText}>{itemData.item.title}</Text>
+              </View>
+            );
+          }}
+        />
       </View>
     </View>
   );
