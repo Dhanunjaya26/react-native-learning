@@ -21,6 +21,7 @@ const GOALS_LIST = [
 export default function App() {
   const [inputValue, setInputValue] = useState("");
   const [goals, setGoals] = useState(GOALS_LIST);
+  const [showInputModal, setShowInputModal] = useState(false);
 
   const addGoalHandler = () => {
     if (inputValue.trim().length !== 0) {
@@ -31,6 +32,7 @@ export default function App() {
       ]);
       setInputValue("");
     }
+    setShowInputModal(false);
   };
 
   const deleteGoalHandler = (id) => {
@@ -41,11 +43,20 @@ export default function App() {
 
   return (
     <View style={styles.appContainer}>
+      <Button
+        title="Add your Goal"
+        color="#5e0acc"
+        onPress={() => setShowInputModal(true)}
+      />
+
       <GoalInput
+        showModal={showInputModal}
         inputValue={inputValue}
         addGoalHandler={addGoalHandler}
+        closeModal={() => setShowInputModal(false)}
         setInputValue={setInputValue}
       />
+
       <View style={styles.goalsContainer}>
         <FlatList
           alwaysBounceVertical={false}
